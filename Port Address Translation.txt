@@ -1,0 +1,85 @@
+Port Address Translation
+
+R-1
+
+en
+conf t
+enable password kiran
+hostname R1
+
+line con 0
+password kiran
+exit
+
+line aux 0
+password kiran
+exit
+
+line vty 0 4
+password kiran
+exit
+
+
+
+int fa0/0
+ip add 192.168.1.100 255.255.255.0
+no shut
+exit
+
+int s0/0
+ip add 100.1.1.1 255.0.0.0
+clock rate 64000
+bandwidth 64
+no shut
+exit
+
+
+ip route 0.0.0.0 0.0.0.0 100.1.1.2
+
+access-list 55 permit 192.168.1.0 0.0.0.255
+ip nat pool CCNA 50.1.1.1 50.1.1.200 netmask 255.255.255.255
+ip nat inside source list 55 pool CCNA overload
+
+
+
+int fa0/0
+ip nat inside
+exit
+
+int s0/0
+ip nat outside
+
+
+ISP
+
+en
+conf t
+enable password kiran
+hostname ISP
+
+line con 0
+password kiran
+exit
+
+line aux 0
+password kiran
+exit
+
+line vty 0 4
+password kiran
+exit
+
+
+
+int fa0/0
+ip add 200.1.1.100 255.255.255.0
+no shut
+exit
+
+int s0/0
+ip add 100.1.1.2 255.0.0.0
+no shut
+exit
+
+
+ip route 0.0.0.0 0.0.0.0 100.1.1.1
